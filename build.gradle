@@ -11,7 +11,6 @@ group = mod_group_id
 
 repositories {
 	mavenLocal()
-	maven { url "https://maven.shedaniel.me/" }
 }
 
 base {
@@ -49,13 +48,6 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
 	implementation "net.neoforged:neoforge:${neo_version}"
-
-	implementation "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
-	implementation "dev.architectury:architectury-forge:${architectury_version}"
-
-	runtimeOnly "me.shedaniel:RoughlyEnoughItems-forge:${rei_version}"
-	compileOnly "me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}"
-	compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:${rei_version}"
 }
 
 tasks.withType(ProcessResources).configureEach {
