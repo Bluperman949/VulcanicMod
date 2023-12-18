@@ -11,26 +11,31 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.RegistryObject;
 
 public class BlockDeferredRegister {
 	protected DeferredRegister<Block> blocks;
 	protected DeferredRegister<Item> items;
 
-	public BlockDeferredRegister(DeferredRegister<Block> blocks, DeferredRegister<Item> items) {
+	public BlockDeferredRegister(DeferredRegister<Block> blocks,
+		DeferredRegister<Item> items) {
 		this.blocks = blocks;
 		this.items = items;
 	}
 
-	public <B extends Block> RegistryObject<B> register(String name, Supplier<B> sup, ResourceKey<CreativeModeTab> tab) {
-		RegistryObject<B> ret = register(name, sup);
-		if (!VItems.TAB_MAP.containsKey(tab)) VItems.TAB_MAP.put(tab, Lists.newArrayList());
-		VItems.TAB_MAP.get(tab).add(items.register(name, () -> new BlockItem(ret.get(), new Item.Properties())));
+	public <B extends Block> DeferredHolder<Block, B> register(String name,
+		Supplier<B> sup, ResourceKey<CreativeModeTab> tab) {
+		DeferredHolder<Block, B> ret = register(name, sup);
+		if (!VItems.TAB_MAP.containsKey(tab))
+			VItems.TAB_MAP.put(tab, Lists.newArrayList());
+		VItems.TAB_MAP.get(tab).add(items.register(name,
+			() -> new BlockItem(ret.get(), new Item.Properties())));
 		return ret;
 	}
 
-	public <B extends Block> RegistryObject<B> register(String name, Supplier<B> sup) {
+	public <B extends Block> DeferredHolder<Block, B> register(String name,
+		Supplier<B> sup) {
 		return blocks.register(name, sup);
 	}
 
