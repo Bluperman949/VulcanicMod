@@ -1,8 +1,9 @@
-package bluper.vulcanic;
+package bluper.vulcanic.world;
 
 public class MachineTier {
 
-	public static final MachineTier TUFFCRETE = new MachineTier(1f, 9000f);
+	public static final MachineTier STONE = new MachineTier(1.1f, 1900f);
+	public static final MachineTier TUFFCRETE = new MachineTier(1f, 2000f);
 
 	public final float specHeat;
 	public final float explodePoint;
