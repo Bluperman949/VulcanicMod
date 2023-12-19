@@ -8,7 +8,6 @@ import org.apache.commons.compress.utils.Lists;
 
 import com.google.common.collect.Maps;
 
-import bluper.vulcanic.Vulcanic;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
@@ -16,12 +15,15 @@ import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import bluper.vulcanic.Vulcanic;
+
 public class VItems {
 	static final DeferredRegister<Item> R =
 		DeferredRegister.create(Registries.ITEM, Vulcanic.MODID);
 
-	public static final HashMap<ResourceKey<CreativeModeTab>, ArrayList<DeferredHolder<Item, ? extends Item>>> TAB_MAP =
-		Maps.newHashMap();
+	public static final HashMap<ResourceKey<CreativeModeTab>,
+		ArrayList<DeferredHolder<Item, ? extends Item>>> TAB_MAP =
+			Maps.newHashMap();
 
 	static <T extends Item> DeferredHolder<Item, T> r(final String name,
 		final Supplier<? extends T> sup, ResourceKey<CreativeModeTab> tab) {
