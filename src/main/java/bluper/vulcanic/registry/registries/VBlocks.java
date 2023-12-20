@@ -10,6 +10,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import bluper.vulcanic.Vulcanic;
 import bluper.vulcanic.registry.BlockDeferredRegister;
+import bluper.vulcanic.world.block.HeatstoneBlock;
 
 public class VBlocks {
 	static final BlockDeferredRegister R = new BlockDeferredRegister(
@@ -19,8 +20,13 @@ public class VBlocks {
 		R.register(bus);
 	}
 
+	// Simple blocks
 	public static final DeferredHolder<Block,
 		Block> TUFFCRETE = R.register("tuffcrete",
 			() -> new Block(Properties.ofFullCopy(Blocks.TUFF).strength(3.0F, 7.0F)),
 			CreativeModeTabs.BUILDING_BLOCKS);
+
+	// BlockEntity blocks
+	public static final DeferredHolder<Block, HeatstoneBlock> HEATSTONE =
+		R.register("heatstone", HeatstoneBlock::new, CreativeModeTabs.FUNCTIONAL_BLOCKS);
 }

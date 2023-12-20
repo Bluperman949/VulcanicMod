@@ -3,10 +3,13 @@ package bluper.vulcanic.capability.heat;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 
-public class HeatHandler implements IHeatHandler, INBTSerializable<CompoundTag> {
-
+public class HeatStorage implements IHeatHandler, INBTSerializable<CompoundTag> {
 	protected float joules;
-	protected float specHeat;
+	protected final float specHeat;
+
+	public HeatStorage(float specHeat) {
+		this.specHeat = specHeat;
+	}
 
 	@Override
 	public float getJoules() {
@@ -19,7 +22,7 @@ public class HeatHandler implements IHeatHandler, INBTSerializable<CompoundTag> 
 	}
 
 	@Override
-	public float getTemp() {
+	public float getDegrees() {
 		return joules / specHeat;
 	}
 
@@ -46,13 +49,13 @@ public class HeatHandler implements IHeatHandler, INBTSerializable<CompoundTag> 
 	@Override
 	public CompoundTag serializeNBT() {
 		CompoundTag nbt = new CompoundTag();
-		nbt.putFloat("Heat", getJoules());
+		nbt.putFloat("Joules", getJoules());
 		return nbt;
 	}
 
 	@Override
 	public void deserializeNBT(CompoundTag nbt) {
-		float nbtJoules = nbt.getFloat("Heat");
+		float nbtJoules = nbt.getFloat("Joules");
 		if (nbtJoules != 0) joules = nbtJoules;
 	}
 }

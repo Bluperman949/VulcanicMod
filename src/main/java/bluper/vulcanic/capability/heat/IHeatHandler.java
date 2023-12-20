@@ -5,7 +5,7 @@ public interface IHeatHandler {
 
 	public float getSpecHeat();
 
-	public float getTemp();
+	public float getDegrees();
 
 	public void setJoules(float joules);
 
@@ -14,4 +14,10 @@ public interface IHeatHandler {
 	public void setDegrees(float degrees);
 
 	public void addDegrees(float degrees);
+
+	public static void conduct(IHeatHandler a, IHeatHandler b) {
+		float transfer = (a.getJoules() - b.getJoules()) * 0.001f;
+		a.addJoules(-transfer);
+		b.addJoules(transfer);
+	}
 }
