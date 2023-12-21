@@ -11,6 +11,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.Level.ExplosionInteraction;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -20,9 +21,11 @@ import bluper.vulcanic.capability.VCapabilities;
 import bluper.vulcanic.capability.heat.BlockHeats;
 import bluper.vulcanic.capability.heat.HeatStorage;
 import bluper.vulcanic.capability.heat.IHeatHandler;
+import bluper.vulcanic.registry.registries.VEntityTypes;
 import bluper.vulcanic.util.Temperature;
 import bluper.vulcanic.world.MachineTier;
-import bluper.vulcanic.world.VDamageSources;
+import bluper.vulcanic.world.VDamageTypes;
+import bluper.vulcanic.world.entity.ExplosionSourceEntity;
 
 public class MachineBlockEntity extends BlockEntity {
 	protected final IHeatHandler[] neighborHeatHandlers = new IHeatHandler[6];
@@ -40,14 +43,15 @@ public class MachineBlockEntity extends BlockEntity {
 	public static void serverTick(Level level, BlockPos pos, BlockState state,
 		MachineBlockEntity be) {
 		be.tickConduction();
-		if (be.heatStorage.getJoules() > be.machineTier.explodePoint) {
-			level.setBlock(pos, Blocks.AIR.defaultBlockState(), 0);
-			level.explode(
-				null,
-				new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-					.getHolderOrThrow(VDamageSources.MACHINE_EXPLOSION)),
-				null, pos.getX(), pos.getY(), pos.getZ(), 1f, true, ExplosionInteraction.TNT);
-		}
+		if (be.heatStorage.getJoules() > be.machineTier.explodePoint) explode(level, pos);
+	}
+
+	public static void explode(Level level, BlockPos pos) {
+		level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_NEIGHBORS);
+		level.explode(new ExplosionSourceEntity(VEntityTypes.EXPLOSION_SOURCE.get(), level),
+			new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+				.getHolderOrThrow(VDamageTypes.MACHINE_EXPLOSION)),
+			null, pos.getX(), pos.getY(), pos.getZ(), 2f, true, ExplosionInteraction.BLOCK);
 	}
 
 	protected void tickConduction() {

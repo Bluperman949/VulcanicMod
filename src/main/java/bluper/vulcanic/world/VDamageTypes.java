@@ -6,7 +6,7 @@ import net.minecraft.world.damagesource.DamageType;
 
 import bluper.vulcanic.Vulcanic;
 
-public class VDamageSources {
+public class VDamageTypes {
 	private static ResourceKey<DamageType> register(String name) {
 		return ResourceKey.create(Registries.DAMAGE_TYPE, Vulcanic.createRL(name));
 	}
