@@ -5,6 +5,9 @@ import java.util.HashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -43,6 +46,7 @@ public class MachineBlockEntity extends BlockEntity {
 	@Override
 	public void onLoad() {
 		super.onLoad();
+		if (level.isClientSide) return;
 		pollNeighbors();
 		if (heatStorage.getJoules() > 0) return;
 		Biome biome = level.getBiome(worldPosition).value();
@@ -76,5 +80,22 @@ public class MachineBlockEntity extends BlockEntity {
 
 	public HeatStorage getHeatStorage() {
 		return heatStorage;
+	}
+
+	@Override
+	public CompoundTag getUpdateTag() {
+		CompoundTag nbt = new CompoundTag();
+		nbt.putFloat("Joules", heatStorage.getJoules());
+		return nbt;
+	}
+
+	@Override
+	public Packet<ClientGamePacketListener> getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this);
+	}
+
+	@Override
+	public void handleUpdateTag(CompoundTag nbt) {
+		heatStorage.setJoules(nbt.getFloat("Joules"));
 	}
 }

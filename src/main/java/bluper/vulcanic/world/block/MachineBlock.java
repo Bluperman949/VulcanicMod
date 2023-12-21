@@ -1,7 +1,8 @@
 package bluper.vulcanic.world.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -14,8 +15,9 @@ public abstract class MachineBlock extends Block implements EntityBlock {
 	}
 
 	@Override
-	public void onNeighborChange(BlockState blockState, LevelReader level, BlockPos myPos,
-		BlockPos neighborPos) {
-		((MachineBlockEntity) level.getBlockEntity(myPos)).pollNeighbors();
+	public BlockState updateShape(BlockState blockState, Direction dir, BlockState neighborState,
+		LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+		if (!level.isClientSide()) ((MachineBlockEntity) level.getBlockEntity(pos)).pollNeighbors();
+		return blockState;
 	}
 }

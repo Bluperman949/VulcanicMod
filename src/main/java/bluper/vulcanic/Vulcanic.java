@@ -3,6 +3,7 @@ package bluper.vulcanic;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.common.Mod;
 
+import bluper.vulcanic.network.VPacketHandler;
 import bluper.vulcanic.registry.registries.VBlockEntityTypes;
 import bluper.vulcanic.registry.registries.VBlocks;
 import bluper.vulcanic.registry.registries.VItems;
@@ -17,6 +18,7 @@ public class Vulcanic {
 		VBlocks.registerAll(bus);
 		VItems.registerAll(bus);
 		VBlockEntityTypes.registerAll(bus);
+		VPacketHandler.init();
 	}
 
 	public static ResourceLocation createRL(String path) {

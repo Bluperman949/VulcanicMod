@@ -16,7 +16,7 @@ public interface IHeatHandler {
 	public void addDegrees(float degrees);
 
 	public static void conduct(IHeatHandler a, IHeatHandler b) {
-		float transfer = (a.getJoules() - b.getJoules()) * 0.001f;
+		float transfer = (a.getJoules() - b.getJoules()) * 0.002f;
 		a.addJoules(-transfer);
 		b.addJoules(transfer);
 	}

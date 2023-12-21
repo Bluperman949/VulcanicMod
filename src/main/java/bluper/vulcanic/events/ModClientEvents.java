@@ -7,10 +7,12 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod.EventBusSubscriber;
 
 import bluper.vulcanic.Vulcanic;
+import bluper.vulcanic.client.overlay.VOverlays;
 import bluper.vulcanic.registry.registries.VItems;
 
 @EventBusSubscriber(modid = Vulcanic.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModClientEvents {
+
 	@SubscribeEvent
 	public static void buildCreativeModeTabContents(
 		final net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent event) {
@@ -22,6 +24,6 @@ public class ModClientEvents {
 	@SubscribeEvent
 	public static void registerGuiOverlays(
 		final net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent event) {
-		
+		event.registerAboveAll(Vulcanic.createRL("thermometer"), VOverlays.THERMOMETER);
 	}
 }
