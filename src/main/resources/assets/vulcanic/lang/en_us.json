@@ -1,3 +1,6 @@
 {
- "block.vulcanic.tuffcrete": "Tuffcrete"
+ "block.vulcanic.tuffcrete": "Tuffcrete",
+ "block.vulcanic.tuffcrete_heatstone": "Tuffcrete Heatstone",
+
+ "death.attack.machine_explosion": "%1$s was blown to pieces in a factory accident"
 }

@@ -1,27 +1,31 @@
 package bluper.vulcanic.world.blockentity;
 
-import java.util.HashMap;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.Level.ExplosionInteraction;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import bluper.vulcanic.capability.VCapabilities;
+import bluper.vulcanic.capability.heat.BlockHeats;
 import bluper.vulcanic.capability.heat.HeatStorage;
 import bluper.vulcanic.capability.heat.IHeatHandler;
 import bluper.vulcanic.util.Temperature;
 import bluper.vulcanic.world.MachineTier;
+import bluper.vulcanic.world.VDamageSources;
 
 public class MachineBlockEntity extends BlockEntity {
-	protected final HashMap<Direction, IHeatHandler> positiveNeighborMachines = new HashMap<>();
+	protected final IHeatHandler[] neighborHeatHandlers = new IHeatHandler[6];
 
 	protected HeatStorage heatStorage;
 	protected MachineTier machineTier;
@@ -36,11 +40,19 @@ public class MachineBlockEntity extends BlockEntity {
 	public static void serverTick(Level level, BlockPos pos, BlockState state,
 		MachineBlockEntity be) {
 		be.tickConduction();
+		if (be.heatStorage.getJoules() > be.machineTier.explodePoint) {
+			level.setBlock(pos, Blocks.AIR.defaultBlockState(), 0);
+			level.explode(
+				null,
+				new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+					.getHolderOrThrow(VDamageSources.MACHINE_EXPLOSION)),
+				null, pos.getX(), pos.getY(), pos.getZ(), 1f, true, ExplosionInteraction.TNT);
+		}
 	}
 
 	protected void tickConduction() {
-		for (IHeatHandler i : positiveNeighborMachines.values())
-			IHeatHandler.conduct(heatStorage, i);
+		for (IHeatHandler i : neighborHeatHandlers)
+			if (i != null) heatStorage.conductTo(i);
 	}
 
 	@Override
@@ -67,14 +79,18 @@ public class MachineBlockEntity extends BlockEntity {
 	}
 
 	public void pollNeighbors() {
-		positiveNeighborMachines.clear();
 		for (Direction dir : Direction.values()) {
-			if (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
-				IHeatHandler heatHandler = level.getCapability(VCapabilities.HEAT_HANDLER_BLOCK,
-					worldPosition.relative(dir), dir.getOpposite());
-				if (heatHandler != null) positiveNeighborMachines.put(dir, heatHandler);
+			int i = dir.get3DDataValue();
+			neighborHeatHandlers[i] = null; // yes, this null may remain after the poll is finished
+			BlockPos relativePos = worldPosition.relative(dir);
+			IHeatHandler heatHandler = level.getCapability(VCapabilities.HEAT_HANDLER_BLOCK,
+				relativePos, dir.getOpposite());
+			if (heatHandler != null) {
+				if (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE)
+					neighborHeatHandlers[i] = heatHandler;
+				continue;
 			}
-			// TODO: get heat loss for surrounding blocks
+			neighborHeatHandlers[i] = BlockHeats.get(level, relativePos);
 		}
 	}
 

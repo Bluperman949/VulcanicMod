@@ -12,13 +12,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import bluper.vulcanic.registry.registries.VBlockEntityTypes;
 import bluper.vulcanic.registry.registries.VBlocks;
 import bluper.vulcanic.util.UtilCopies;
+import bluper.vulcanic.world.MachineTier;
 import bluper.vulcanic.world.blockentity.HeatstoneBlockEntity;
 import bluper.vulcanic.world.blockentity.MachineBlockEntity;
 
 public class HeatstoneBlock extends MachineBlock {
 
-	public HeatstoneBlock() {
+	public final MachineTier tier;
+
+	public HeatstoneBlock(MachineTier tier) {
 		super(Properties.ofFullCopy(VBlocks.TUFFCRETE.get()));
+		this.tier = tier;
 	}
 
 	@Nullable @Override
@@ -32,6 +36,6 @@ public class HeatstoneBlock extends MachineBlock {
 
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState blockState) {
-		return new HeatstoneBlockEntity(pos, blockState);
+		return new HeatstoneBlockEntity(pos, blockState, tier);
 	}
 }

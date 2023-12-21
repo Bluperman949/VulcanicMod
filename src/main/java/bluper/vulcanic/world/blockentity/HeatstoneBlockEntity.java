@@ -8,7 +8,7 @@ import bluper.vulcanic.world.MachineTier;
 
 public class HeatstoneBlockEntity extends MachineBlockEntity {
 
-	public HeatstoneBlockEntity(BlockPos pos, BlockState blockState) {
-		super(VBlockEntityTypes.HEATSTONE.get(), pos, blockState, MachineTier.TUFFCRETE);
+	public HeatstoneBlockEntity(BlockPos pos, BlockState blockState, MachineTier tier) {
+		super(VBlockEntityTypes.HEATSTONE.get(), pos, blockState, tier);
 	}
 }

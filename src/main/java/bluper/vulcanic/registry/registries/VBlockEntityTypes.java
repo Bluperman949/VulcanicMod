@@ -6,6 +6,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import bluper.vulcanic.Vulcanic;
+import bluper.vulcanic.world.block.HeatstoneBlock;
 import bluper.vulcanic.world.blockentity.HeatstoneBlockEntity;
 
 public class VBlockEntityTypes {
@@ -17,7 +18,9 @@ public class VBlockEntityTypes {
 	}
 
 	public static final DeferredHolder<BlockEntityType<?>,
-		BlockEntityType<HeatstoneBlockEntity>> HEATSTONE =
-			R.register("heatstone", () -> BlockEntityType.Builder
-				.of(HeatstoneBlockEntity::new, VBlocks.HEATSTONE.get()).build(null));
+		BlockEntityType<HeatstoneBlockEntity>> HEATSTONE = R.register("heatstone",
+			() -> BlockEntityType.Builder
+				.of((pos, state) -> new HeatstoneBlockEntity(pos, state,
+					((HeatstoneBlock) state.getBlock()).tier), VBlocks.TUFFCRETE_HEATSTONE.get())
+				.build(null));
 }
