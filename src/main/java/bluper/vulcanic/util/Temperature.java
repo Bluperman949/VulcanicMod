@@ -3,6 +3,7 @@ package bluper.vulcanic.util;
 public class Temperature {
 
 	public static final float FREEZING = 273.15f;
+	public static final float DAMAGING = FREEZING + 80;
 
 	public static enum Unit {
 		KELVIN,

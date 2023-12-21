@@ -12,4 +12,5 @@ public class VDamageTypes {
 	}
 
 	public static final ResourceKey<DamageType> MACHINE_EXPLOSION = register("machine_explosion");
+	public static final ResourceKey<DamageType> MACHINE_HOT_FLOOR = register("machine_hot_floor");
 }

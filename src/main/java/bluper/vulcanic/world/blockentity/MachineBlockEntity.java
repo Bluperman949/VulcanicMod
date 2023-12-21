@@ -46,7 +46,7 @@ public class MachineBlockEntity extends BlockEntity {
 		if (be.heatStorage.getJoules() > be.machineTier.explodePoint) explode(level, pos);
 	}
 
-	public static void explode(Level level, BlockPos pos) {
+	protected static void explode(Level level, BlockPos pos) {
 		level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_NEIGHBORS);
 		level.explode(new ExplosionSourceEntity(VEntityTypes.EXPLOSION_SOURCE.get(), level),
 			new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
